@@ -1,0 +1,121 @@
+.article {
+  line-height: 1.6em;
+
+  &-cap {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &-title {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: flex-start;
+    margin: {
+      right: 12px;
+      bottom: 12px;
+    }
+
+    .article-rating {
+      display: inherit;
+      flex-direction: row;
+      align-items: center;
+      margin-right: 12px;
+      padding-top: 4px;
+      border: none;
+      outline: none;
+
+      background: none;
+
+      & svg:hover {
+        cursor: pointer;
+        /* color: var(--theme-color); */
+      }
+
+      /* span + span {
+          margin-left: 5px;
+      } */
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.65rem;
+      line-height: 1.25em;
+      word-break: break-word;
+      color: var(--link-color);
+    }
+
+    h2 + div {
+      margin-left: 12px;
+    }
+  }
+
+  &-info {
+    display: flex;
+    align-self: flex-start;
+
+    .article-meta {
+      display: inherit;
+      flex-direction: column;
+      flex-shrink: inherit;
+      align-items: end;
+
+      h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        line-height: 1.5em;
+        color: var(--text-color);
+      }
+
+      span {
+        color: var(--text-color-alt);
+      }
+    }
+
+    div + img {
+      margin-left: 12px;
+    }
+
+    img {
+      width: 46px;
+      height: 46px;
+      background-color: var(--normal-color);
+      border-radius: 50%;
+    }
+  }
+
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 4px;
+
+    span {
+      /* padding: 2px 5px;
+      border: 1px solid currentColor; */
+      border-radius: 2px;
+      color: var(--text-color-alt);
+    }
+
+    span + span {
+      margin-left: 8px;
+    }
+
+    .article-tag {
+      border: 1px solid var(--text-color-alt);
+      border-radius: 2px;
+      background-color: var(--normal-color);
+      margin-right: 3px;
+    }
+  }
+
+  &-description {
+    margin: 0;
+    margin-top: 8px;
+    font-size: 1.2rem;
+    word-break: break-word;
+    text-align: justify;
+    color: var(--text-color);
+  }
+
+}

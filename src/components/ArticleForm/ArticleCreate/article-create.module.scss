@@ -1,0 +1,97 @@
+  .ant-form {
+
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    margin: 34px auto 67px auto!important;
+    padding: 48px 32px!important;
+    flex: 1;
+    border: 1px solid var(--normal-color);
+    background-color: var(--block-background);
+    box-shadow: var(--block-shadow);
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .ant-form-item {
+      margin-bottom: 21px;
+
+      div {
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+
+      label {
+        height: 100%;
+        padding: 0;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+        color: #262626;
+      }
+    }
+
+
+    .form-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 1.65rem;
+      line-height: 1.2em;
+    }
+
+    .ant-form-item-control-input-content{
+      margin: 0;
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: 0;
+
+      span {
+        display: block;
+        text-align: center;
+      }
+    }
+
+    textarea.ant-input {
+      min-height: 168px;
+    }
+
+    .form-item-list__wrapper {
+      position: relative;
+    }
+
+    .form-item-list__add-button {
+      position: absolute;
+      bottom: 37px;
+      right: 32px;
+
+      button {
+        border: 1px solid var( --theme-color);
+        box-sizing: border-box;
+        border-radius: 4px;
+        font-size: 16px;
+        line-height: 24px;
+        padding: 0 36px;
+        color: var( --theme-color);
+      }
+    }
+
+    .form-item-list__del-button {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--error-color);
+
+      border: 1px solid var(--error-color);
+      box-sizing: border-box;
+      border-radius: 4px;
+
+      padding: 0 36px;
+      margin-left: 18px;
+    }
+
+    .form-item-list__send-button {
+      width: 40%;
+      background: #1890FF;
+      border-radius: 4px;
+    }
+  }

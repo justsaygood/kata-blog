@@ -1,0 +1,55 @@
+{
+  "env": { "browser": true, "es2022": true },
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "ignorePatterns": ["node_modules", "dist", "build"],
+  "parserOptions": {
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": 13,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "prettier", "import"],
+  "rules": {
+    "indent": ["error", 2, {
+      "SwitchCase": 1
+    }],
+    "import/no-unresolved": [2, { "caseSensitive": false }],
+    "import/order": [
+      2,
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "newlines-between": "always"
+      }
+    ],
+    "linebreak-style": [0, "windows"],
+    "prettier/prettier": "error",
+    "quotes": ["error", "single"],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/prop-types": 0,
+    "react/state-in-constructor": 0,
+    "react/react-in-jsx-scope": "off",
+    "class-methods-use-this": "off",
+    "semi": ["error", "never"],
+    "no-param-reassign": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  }
+}

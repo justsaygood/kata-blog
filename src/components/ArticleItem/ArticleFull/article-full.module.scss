@@ -1,0 +1,29 @@
+.article-wrapper {
+  line-height: 1.8em;
+  word-break: break-word;
+  text-align: justify;
+  box-shadow: var(--block-shadow);
+  margin-top: 20px;
+  padding: 26px 16px 52px;
+  background-color: var(--block-background);
+
+  .form-spinner {
+    position: relative!important;
+    top: 50%;
+    left: 50%;
+  }
+
+  .article-controls {
+    margin-top: 30px;
+  }
+
+  .article-body {
+    line-height: inherit;
+    font-size: 1.2rem;
+    color: var(--text-color);
+
+    li {
+      list-style: unset;
+    }
+  }
+}

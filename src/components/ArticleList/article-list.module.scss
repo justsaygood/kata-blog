@@ -1,0 +1,30 @@
+.articles-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    list-style: none;
+    box-shadow: var(--block-shadow);
+    border-radius: var(--block-border-radius);
+    background-color: var(--block-background);
+    margin-bottom: 26px;
+    padding: 15px 20px 25px;
+   }
+}
+
+.form-spinner {
+  position: relative!important;
+  top: 50%;
+  left: 50%;
+}
+
+.form-alert {
+  position: relative;
+  top: 50%;
+  left: 50%;
+}
+
+.ant-pagination {
+  display: flex;
+  justify-content: center;
+}

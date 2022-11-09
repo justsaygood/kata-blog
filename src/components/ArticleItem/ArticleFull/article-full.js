@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown'
 import { Alert, Modal, Spin, notification } from 'antd'
@@ -12,6 +12,7 @@ import classes from './article-full.module.scss'
 
 export default function ArticleFull() {
   const { userData } = useSelector((state) => state.user)
+  const history = useHistory()
   const { slug } = useParams()
 
   const token = JSON.parse(localStorage.getItem('token')) ? JSON.parse(localStorage.getItem('token')) : ''
@@ -50,7 +51,8 @@ export default function ArticleFull() {
           }}
         />
       ),
-      duration: 8,
+      duration: 10,
+      onClose: () => history.push('/'),
     })
   }
 
@@ -83,7 +85,9 @@ export default function ArticleFull() {
     </article>
   )
 
-  const spinner = <Spin size="large" className={classes['form-spinner']} />
+  const spinner = (
+    <Spin size="large" className={classes['form-spinner']} style={{ display: 'flex', justifyContent: 'center' }} />
+  )
 
   const errorMessage = error === true && (
     <Alert description="Data loading error. Please try reloading the page." type="error" showIcon />

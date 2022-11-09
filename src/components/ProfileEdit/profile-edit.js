@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, Spin, Alert, notification } from 'antd'
 import { SmileTwoTone } from '@ant-design/icons'
 
@@ -8,10 +9,11 @@ import classes from '../SignIn/sign-in.module.scss'
 
 export default function ProfileEdit() {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { error, status, userData } = useSelector((state) => state.user)
 
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState(userData.email)
+  const [username, setUsername] = useState(userData.username)
   const [token, setToken] = useState('')
 
   const [isSuccess, setSuccess] = useState(false)
@@ -32,7 +34,10 @@ export default function ProfileEdit() {
     notification.open({
       message: 'Your profile has been updated!',
       icon: <SmileTwoTone twoToneColor="#eb2f96" />,
-      duration: 8,
+      duration: 6,
+      onClose: () => {
+        history.goBack()
+      },
     })
   }
 
@@ -55,27 +60,19 @@ export default function ProfileEdit() {
     })
   }
 
-  const [data] = useState([
-    {
-      name: ['username'],
-      value: username || '',
-    },
-    {
-      name: ['email'],
-      value: email || '',
-    },
-  ])
-
   const profileForm = (
     <Form
       name="dynamic_form_item"
       layout="vertical"
       size="large"
       className={classes['ant-form']}
+      initialValues={{
+        username,
+        email,
+      }}
       onFinish={(val) => {
         editProfile(val)
       }}
-      data={data}
     >
       <div className={classes['form-title']}>
         <span>Edit Profile</span>
@@ -153,10 +150,23 @@ export default function ProfileEdit() {
     dispatch(errorNull())
   }
 
-  const spinner = <Spin size="large" className={classes['form-spinner']} />
+  const spinner = (
+    <Spin
+      size="large"
+      className={classes['form-spinner']}
+      style={{ position: 'absolute', top: '200px', left: '300px' }}
+    />
+  )
 
   const errorMessage = (
-    <Alert description="Whoops, something went wrong :(" type="error" showIcon closable onClose={onClose} />
+    <Alert
+      description="Whoops, something went wrong :( Try again."
+      type="error"
+      showIcon
+      closable
+      onClose={onClose}
+      style={{ position: 'absolute', top: '200px', left: '300px' }}
+    />
   )
 
   return (

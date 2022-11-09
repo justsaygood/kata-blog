@@ -16,6 +16,7 @@
     --link-color-hover: hsl(207, 100%, 44%);
 
     --btn-background-hover: hsla(0, 0%, 0%, 0.045);
+    --btn-text-color: #FFFFFF;
     --btn-text-color-disabled: hsla(0, 0%, 0%, 0.37);
 
     --divider-color: hsl(0, 0%, 91%);

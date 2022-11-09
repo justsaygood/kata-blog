@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Alert, Spin } from 'antd'
+import { useHistory, useParams } from 'react-router-dom'
+import { Alert, notification, Spin } from 'antd'
+import { SmileOutlined } from '@ant-design/icons'
 
 import ArticleForm from '../article-form'
 import { apiService } from '../../../services/apiService'
@@ -8,6 +9,7 @@ import classes from '../ArticleCreate/article-create.module.scss'
 
 function ArticleEdit() {
   const { slug } = useParams()
+  const history = useHistory()
 
   const [articleTitle, setArticleTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -33,6 +35,24 @@ function ArticleEdit() {
     updateFormData()
   }, [])
 
+  const successMessage = () => {
+    notification.open({
+      message: 'Your article has been updated successfully!',
+      icon: (
+        <SmileOutlined
+          style={{
+            color: 'green',
+          }}
+        />
+      ),
+      duration: 8,
+      onClose: () => {
+        setSuccess(false)
+        history.goBack()
+      },
+    })
+  }
+
   const articleUpdate = (str) => {
     const modifiedArticle = {
       title: str.title.trim(),
@@ -49,6 +69,7 @@ function ArticleEdit() {
         if (res.article) {
           setLoading(false)
           setSuccess(true)
+          successMessage()
 
           updateFormData()
         }
@@ -90,7 +111,6 @@ function ArticleEdit() {
   }, [description, articleTitle, articleBody, tagList])
 
   const onClose = () => {
-    setSuccess(false)
     setError(false)
   }
 
@@ -108,14 +128,12 @@ function ArticleEdit() {
     />
   )
 
-  const successMessage = <Alert description="A new article was created successfully!" closable onClose={onClose} />
-
   return (
     <>
       {loading && spinner}
       {form}
       {error && errorMessage}
-      {isSuccess && successMessage}
+      {isSuccess}
     </>
   )
 }

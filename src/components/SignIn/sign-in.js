@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input, Button, Alert, Spin } from 'antd'
 
@@ -9,6 +9,7 @@ import classes from './sign-in.module.scss'
 
 export default function SignIn() {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { error, status, userData } = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -89,7 +90,13 @@ export default function SignIn() {
     dispatch(errorNull())
   }
 
-  const spinner = <Spin size="large" className={classes['form-spinner']} />
+  const spinner = (
+    <Spin
+      size="large"
+      className={classes['form-spinner']}
+      style={{ position: 'absolute', top: '200px', left: '300px' }}
+    />
+  )
 
   const errorMessage = (
     <Alert
@@ -99,10 +106,19 @@ export default function SignIn() {
       showIcon
       closable
       onClose={onClose}
+      style={{ position: 'absolute', top: '200px', left: '300px' }}
     />
   )
 
-  const successMessage = <Alert className={classes['form-alert']} description="Welcome to Realworld Blog!" closable />
+  const successMessage = (
+    <Alert
+      className={classes['form-alert']}
+      description="Welcome to Realworld Blog!"
+      closable
+      onClose={() => history.push('/')}
+      style={{ position: 'absolute', top: '200px', left: '300px' }}
+    />
+  )
 
   return (
     <>

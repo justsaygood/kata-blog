@@ -56,14 +56,9 @@
       min-height: 168px;
     }
 
-    .form-item-list__wrapper {
+    .form-item-list-wrapper {
       position: relative;
     }
-
-    .form-item-list__add-button {
-      position: absolute;
-      bottom: 37px;
-      right: 32px;
 
       button {
         border: 1px solid var( --theme-color);
@@ -74,24 +69,17 @@
         padding: 0 36px;
         color: var( --theme-color);
       }
-    }
 
-    .form-item-list__del-button {
-      font-size: 16px;
-      line-height: 24px;
+    .ant-btn-del-tag {
       color: var(--error-color);
-
-      border: 1px solid var(--error-color);
-      box-sizing: border-box;
-      border-radius: 4px;
-
-      padding: 0 36px;
-      margin-left: 18px;
+      box-shadow: 0 0 3px var(--error-color);
+      margin-left: 8px;
     }
 
-    .form-item-list__send-button {
+    .form-item-send-button {
       width: 40%;
       background: #1890FF;
       border-radius: 4px;
+      color: var(--btn-text-color);
     }
   }

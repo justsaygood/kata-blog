@@ -3,13 +3,20 @@ import { Form, Input, Button } from 'antd'
 
 import classes from './ArticleCreate/article-create.module.scss'
 
-export default function ArticleForm({ transferData, title }) {
+export default function ArticleForm({ transferData, title, fields }) {
   const onFinish = (str) => {
     transferData(str)
   }
 
   return (
-    <Form size="large" name="dynamic_form_item" layout="vertical" className={classes['ant-form']} onFinish={onFinish}>
+    <Form
+      size="large"
+      name="dynamic_form_item"
+      layout="vertical"
+      className={classes['ant-form']}
+      onFinish={onFinish}
+      fields={fields}
+    >
       <div className={classes['form-title']}>
         <span>{title}</span>
       </div>
@@ -54,23 +61,23 @@ export default function ArticleForm({ transferData, title }) {
         <Input.TextArea type="text" placeholder="Text" className={classes['ant-input']} />
       </Form.Item>
 
-      <div className={classes['form-item-list__wrapper']}>
+      <div className={classes['form-item-list-wrapper']}>
         <Form.List name="tagList">
           {(fieldsList, { add, remove }) => (
             <>
               {fieldsList.map((field, index) => (
                 <Form.Item label={index === 0 ? 'Tags' : ''} className={classes['ant-form-item']} key={field.key}>
                   {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                  <Form.Item {...field} noStyle>
+                  <Form.Item {...field} noStyle rules={[{ required: true, message: 'set at least one tag' }]}>
                     <Input placeholder="Tag" style={{ width: '40%' }} />
                   </Form.Item>
 
                   {fieldsList.length > 1 ? (
                     <Button
+                      className={classes['ant-btn-del-tag']}
                       onClick={() => {
                         remove(field.name)
                       }}
-                      className={classes['form-item-del-button']}
                     >
                       Delete
                     </Button>
@@ -78,7 +85,7 @@ export default function ArticleForm({ transferData, title }) {
                 </Form.Item>
               ))}
 
-              <Form.Item className={classes['form-item-add-button']}>
+              <Form.Item>
                 <Button
                   type="dashed"
                   onClick={() => {
@@ -93,7 +100,7 @@ export default function ArticleForm({ transferData, title }) {
         </Form.List>
 
         <Form.Item className={classes['ant-form-item']}>
-          <Button type="primary" htmlType="submit" className={classes['form-item-list__send-button']}>
+          <Button type="primary" htmlType="submit" className={classes['form-item-send-button']}>
             Send
           </Button>
         </Form.Item>

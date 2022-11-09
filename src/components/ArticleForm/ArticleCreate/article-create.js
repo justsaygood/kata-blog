@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Spin, Alert } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { Spin, Alert, notification } from 'antd'
+import { SmileOutlined } from '@ant-design/icons'
 
 import ArticleForm from '../article-form'
 import { apiService } from '../../../services/apiService'
@@ -7,16 +9,35 @@ import { apiService } from '../../../services/apiService'
 import classes from './article-create.module.scss'
 
 export default function ArticleCreate() {
+  const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [isSuccess, setSuccess] = useState(false)
+
+  const successMessage = () => {
+    notification.open({
+      message: 'A new article has been created successfully!',
+      icon: (
+        <SmileOutlined
+          style={{
+            color: 'yellow',
+          }}
+        />
+      ),
+      duration: 8,
+      onClose: () => {
+        setSuccess(false)
+        history.push('/')
+      },
+    })
+  }
 
   const createArticle = (str) => {
     const newArticle = {
       title: str.title.trim(),
       description: str.description.trim(),
       body: str.body,
-      tagList: str.tagList.map((item) => item.trim()).filter((item) => item && item !== ''),
+      tagList: str.tagList.map((item) => item.trim()).filter((item) => item),
     }
     setLoading(true)
 
@@ -27,6 +48,7 @@ export default function ArticleCreate() {
           if (res.article) {
             setLoading(false)
             setSuccess(true)
+            successMessage()
             setError(false)
           }
 
@@ -44,15 +66,14 @@ export default function ArticleCreate() {
       setLoading(false)
       // console.log(err)
     }
-    console.log(isSuccess)
   }
 
   const onClose = () => {
-    setSuccess(false)
     setError(false)
   }
 
   const article = <ArticleForm transferData={createArticle} title="Create new article" />
+
   const spinner = <Spin size="large" className={classes['form-spinner']} />
 
   const errorMessage = (
@@ -65,14 +86,12 @@ export default function ArticleCreate() {
     />
   )
 
-  const successMessage = <Alert description="A new article was created successfully!" closable onClose={onClose} />
-
   return (
     <>
       {loading && spinner}
       {article}
       {error && errorMessage}
-      {isSuccess && successMessage}
+      {isSuccess}
     </>
   )
 }

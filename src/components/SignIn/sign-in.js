@@ -94,7 +94,7 @@ export default function SignIn() {
     <Spin
       size="large"
       className={classes['form-spinner']}
-      style={{ position: 'absolute', top: '200px', left: '300px' }}
+      style={{ position: 'relative', bottom: '500px', left: '200px', width: '50%' }}
     />
   )
 
@@ -106,7 +106,7 @@ export default function SignIn() {
       showIcon
       closable
       onClose={onClose}
-      style={{ position: 'absolute', top: '200px', left: '300px' }}
+      style={{ position: 'relative', bottom: '500px', left: '200px', width: '50%' }}
     />
   )
 
@@ -116,7 +116,7 @@ export default function SignIn() {
       description="Welcome to Realworld Blog!"
       closable
       onClose={() => history.push('/')}
-      style={{ position: 'absolute', top: '200px', left: '300px' }}
+      style={{ position: 'relative', top: '-500px', left: '200px', width: '50%' }}
     />
   )
 

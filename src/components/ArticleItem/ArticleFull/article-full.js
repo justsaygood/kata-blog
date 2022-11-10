@@ -51,7 +51,7 @@ export default function ArticleFull() {
           }}
         />
       ),
-      duration: 10,
+      duration: 4,
       onClose: () => history.push('/'),
     })
   }
@@ -69,7 +69,7 @@ export default function ArticleFull() {
             successMessage()
           } else {
             setError(true)
-            console.log(`error: ${res.status}`)
+            // console.log(`error: ${res.status}`)
           }
         })
       },

@@ -1,16 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Button } from 'antd'
+import { Button, Result } from 'antd'
 
 import { logOutUser } from '../../store/userSlice'
 import classes from '../App/app.module.scss'
 import selfie from '../../assets/user.png'
 
-export default function Header() {
+export default function Header({ connection }) {
   const dispatch = useDispatch()
   const { userData } = useSelector((state) => state.user)
-  // console.log(userData)
 
   const avatar = userData === null || !userData.image ? selfie : userData.image
 
@@ -30,7 +29,7 @@ export default function Header() {
       </Button>
       <Link to="/profile">
         <div className={classes.user}>
-          <span>{userData ? userData.username : 'NinaNina'}</span>
+          <span>{userData ? userData.username : '[loading]'}</span>
           <img src={avatar} alt="user selfie" />
         </div>
       </Link>
@@ -51,12 +50,19 @@ export default function Header() {
     </div>
   )
 
+  const errorResults = (
+    <Result status="error" title="Internet disconnected" subTitle="Check your connection and reload the page!" />
+  )
+
   return (
-    <header className={classes.header}>
-      <h1>
-        <Link to="/">Realworld Blog</Link>
-      </h1>
-      {userData ? buttonsUser : buttons}
-    </header>
+    <>
+      <header className={classes.header}>
+        <h1>
+          <Link to="/">Realworld Blog</Link>
+        </h1>
+        {userData ? buttonsUser : buttons}
+      </header>
+      {!connection ? errorResults : null}
+    </>
   )
 }

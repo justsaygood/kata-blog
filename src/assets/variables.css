@@ -5,6 +5,7 @@
 
     --page-background: #EBEEF3;
     --block-background: #FFFFFF;
+    --block-border-radius: 3px;
     --block-shadow: 0px 4px 12px hsla(0, 0%, 0%, 0.15);
     --normal-color: hsl(0, 0%, 85%);
     --ui-transition: .25 ease-in-out;

@@ -45,7 +45,7 @@ function ArticleEdit() {
           }}
         />
       ),
-      duration: 8,
+      duration: 4,
       onClose: () => {
         setSuccess(false)
         history.goBack()

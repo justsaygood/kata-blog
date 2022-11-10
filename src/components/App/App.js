@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import ArticleEdit from '../ArticleForm/ArticleEdit/article-edit'
 import SignUp from '../SignUp/sign-up'
 import SignIn from '../SignIn/sign-in'
 import ProfileEdit from '../ProfileEdit/profile-edit'
+import NetworkDetector from '../../utils/network'
 
 import 'antd/dist/antd.min.css'
 import classes from './app.module.scss'
@@ -18,6 +19,16 @@ import classes from './app.module.scss'
 function App() {
   const dispatch = useDispatch()
   const { userData } = useSelector((state) => state.user)
+
+  const [connection, setConnection] = useState(true)
+
+  const detectConnection = () => {
+    if (connection) {
+      setConnection(false)
+    } else {
+      setConnection(true)
+    }
+  }
 
   useEffect(() => {
     try {
@@ -31,8 +42,9 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <Header connection={connection} />
       <section className={classes.main}>
+        <NetworkDetector detectConnection={detectConnection} />
         <Switch>
           <Route path="/articles/:slug/edit">{userData ? <ArticleEdit /> : <Redirect to="/sign-in" />}</Route>
           <Route path="/articles/:slug" exact component={ArticleFull} />

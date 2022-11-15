@@ -37,6 +37,10 @@ export const fetchUserLogIn = createAsyncThunk('user/fetchUserLogIn', async (new
       },
       body: JSON.stringify({ user: newUser }),
     })
+    if (response.status === 422) {
+      return await response.json().then((result) => rejectWithValue(result))
+    }
+
     if (!response.ok) {
       throw new Error('Data fetching failed')
     }
@@ -95,6 +99,7 @@ const userSlice = createSlice({
     userData: null,
     status: null,
     error: null,
+    errorMessage: {},
   },
   reducers: {
     logOutUser(state) {
@@ -104,6 +109,7 @@ const userSlice = createSlice({
     },
     errorNull(state) {
       state.error = null
+      state.errorMessage = {}
     },
   },
   extraReducers: {
@@ -151,6 +157,8 @@ const userSlice = createSlice({
       if (action.payload.errors) {
         state.status = 'rejected'
 
+        state.errorMessage = action.payload.errors
+
         let errStatus = ''
 
         if (action.payload.errors.error) {
@@ -165,6 +173,7 @@ const userSlice = createSlice({
     [fetchUserLogIn.rejected]: (state, action) => {
       state.status = 'rejected'
       state.error = action.payload
+      state.errorMessage = action.payload.errors
     },
     [fetchUserSave.pending]: (state) => {
       state.status = 'loading'

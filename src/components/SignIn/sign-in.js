@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Input, Button, Alert, Spin } from 'antd'
+import { Alert, Spin, notification } from 'antd'
+import { UserOutlined, LoadingOutlined } from '@ant-design/icons'
 
 import { fetchUserLogIn, errorNull } from '../../store/userSlice'
 
@@ -10,12 +12,38 @@ import classes from './sign-in.module.scss'
 export default function SignIn() {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { error, status, userData } = useSelector((state) => state.user)
+  const { error, status, userData, errorMessage } = useSelector((state) => state.user)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onBlur',
+  })
+
+  const successMessage = () => {
+    notification.open({
+      message: 'Welcome to Realworld Blog!',
+      icon: (
+        <UserOutlined
+          style={{
+            color: '#1890FF',
+          }}
+        />
+      ),
+      duration: 2,
+      onClose: () => {
+        history.push('/')
+      },
+    })
+  }
 
   useEffect(() => {
     try {
       if (userData !== null) {
         localStorage.setItem('token', JSON.stringify(userData.token))
+        successMessage()
       }
     } catch (err) {
       console.log(err)
@@ -31,59 +59,51 @@ export default function SignIn() {
   }
 
   const form = (
-    <Form
-      layout="vertical"
-      name="normal_login"
-      size="large"
-      className={classes['ant-form']}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={(str) => {
-        userAuthorize(str)
-      }}
-    >
+    <form className={classes['sign-form']} onSubmit={handleSubmit(userAuthorize)}>
       <div className={classes['form-title']}>
         <span>Sign In</span>
       </div>
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        label="Email address"
-        name="email"
-        rules={[
-          {
-            type: 'email',
+      <label htmlFor="email" className={classes['form-label']}>
+        Email address
+        <input
+          className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          placeholder="Email address"
+          /* eslint-disable-next-line react/jsx-props-no-spreading */
+          {...register('email', {
             required: true,
-            message: 'Please input your email!',
-          },
-        ]}
-      >
-        <Input placeholder="Email address" />
-      </Form.Item>
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="password"
-        label="Password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Password!',
-          },
-        ]}
-      >
-        <Input.Password type="password" placeholder="Password" />
-      </Form.Item>
+            pattern: {
+              value: /^[a-z0-9._%+-]+@[a-z0-9-]+.+.[a-z]{2,4}$/g,
+              message: 'Invalid email address',
+            },
+          })}
+        />
+        {errors?.email && <p className={classes['form-validate']}>{errors?.email?.message || 'Error!'}</p>}
+      </label>
+      <label htmlFor="email" className={classes['form-label']}>
+        Password
+        <input
+          className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          type="password"
+          placeholder="Password"
+          /* eslint-disable-next-line react/jsx-props-no-spreading */
+          {...register('password', {
+            required: 'Please input your Password!',
+          })}
+        />
+        {errors.password ? <p className={classes['form-validate']}>{errors.password.message}</p> : null}
+        {Object.keys(errorMessage).length ? (
+          <p className={classes['form-validate']}>Invalid email address or password</p>
+        ) : null}
+      </label>
 
-      <Form.Item className={classes['ant-form-item-control-input-content']}>
-        <Button type="primary" htmlType="submit" className={classes['login-form-button']}>
-          Log in
-        </Button>
-        <span>
-          Don’t have an account? <Link to="/sign-up">Sign Up</Link>.
-        </span>
-      </Form.Item>
-    </Form>
+      <button type="submit" className={classes['form-button']} disabled={status === 'loading'}>
+        {status === 'loading' ? <LoadingOutlined /> : 'Log in'}
+      </button>
+      <span>
+        Don’t have an account? <Link to="/sign-up">Sign Up</Link>.
+      </span>
+    </form>
   )
 
   const onClose = () => {
@@ -98,7 +118,7 @@ export default function SignIn() {
     />
   )
 
-  const errorMessage = (
+  const errorAlert = (
     <Alert
       className={classes['form-alert']}
       description="Whoops, something went wrong :("
@@ -106,17 +126,7 @@ export default function SignIn() {
       showIcon
       closable
       onClose={onClose}
-      style={{ position: 'relative', bottom: '500px', left: '200px', width: '50%' }}
-    />
-  )
-
-  const successMessage = (
-    <Alert
-      className={classes['form-alert']}
-      description="Welcome to Realworld Blog!"
-      closable
-      onClose={() => history.push('/')}
-      style={{ position: 'relative', top: '-500px', left: '200px', width: '50%' }}
+      style={{ position: 'relative', bottom: '470px', left: '200px', width: '50%' }}
     />
   )
 
@@ -124,8 +134,7 @@ export default function SignIn() {
     <>
       {form}
       {status === 'loading' && spinner}
-      {error && errorMessage}
-      {userData && successMessage}
+      {error && !Object.keys(errorMessage).length && errorAlert}
     </>
   )
 }

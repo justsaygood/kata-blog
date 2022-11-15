@@ -46,7 +46,7 @@ function App() {
       <section className={classes.main}>
         <NetworkDetector detectConnection={detectConnection} />
         <Switch>
-          <Route path="/articles/:slug/edit">{userData ? <ArticleEdit /> : <Redirect to="/sign-in" />}</Route>
+          <Route path="/articles/:slug/edit">{userData ? <ArticleEdit /> : <Redirect to="/articles" />}</Route>
           <Route path="/articles/:slug" exact component={ArticleFull} />
           <Route path="/articles" exact component={ArticleList} />
           <Route path="/" exact component={ArticleList} />

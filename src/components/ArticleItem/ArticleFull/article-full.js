@@ -51,8 +51,8 @@ export default function ArticleFull() {
           }}
         />
       ),
-      duration: 4,
-      onClose: () => history.push('/'),
+      duration: 2,
+      onClose: () => history.push('/articles'),
     })
   }
 

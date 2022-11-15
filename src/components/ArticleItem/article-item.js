@@ -28,8 +28,6 @@ export default function ArticleItem({ item, confirmation, showSettings }) {
     }
   }, [userData, favorited])
 
-  // console.log(userData)
-
   const likeHandler = () => {
     if (!like) {
       apiService.addLike(slug, token).then((res) => {

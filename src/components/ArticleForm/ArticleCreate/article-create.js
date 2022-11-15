@@ -24,7 +24,7 @@ export default function ArticleCreate() {
           }}
         />
       ),
-      duration: 4,
+      duration: 3,
       onClose: () => {
         setSuccess(false)
         history.push('/')

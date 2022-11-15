@@ -1,5 +1,7 @@
-  .ant-form {
+  .sign-form {
 
+    display: flex;
+    flex-direction: column;
     font-family: 'Roboto', sans-serif;
     width: 384px;
     margin: 60px auto 0 auto!important;
@@ -9,23 +11,6 @@
     background-color: var(--block-background);
     box-shadow: var(--block-shadow);
 
-    .ant-form-item {
-      margin-bottom: 12px;
-
-      div {
-        padding: 0;
-      }
-
-      label {
-        height: 100%;
-        padding: 0;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-        color: #262626;
-      }
-    }
-
     .form-title {
       text-align: center;
       margin-bottom: 20px;
@@ -33,25 +18,6 @@
       line-height: 1.2em;
       font-style: normal;
       font-weight: 500;
-
-    }
-
-    .ant-form-item-control-input-content {
-      flex-grow: 0;
-      flex-shrink: 0;
-      flex-basis: 0;
-
-      .login-form-button {
-        width: 100%;
-        margin:  12px 0 8px 0;
-      }
-
-
-      span {
-        display: block;
-        text-align: center;
-        // margin-top: 8px;
-      }
     }
 
     .form-spinner {
@@ -64,5 +30,61 @@
       position: relative;
       top: 50%;
       left: 50%;
+    }
+
+    .form-label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      color: #262626;
+      line-height: 22px;
+      margin-bottom: 12px;
+
+      .input {
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 16px;
+        line-height: 24px;
+        outline: none;
+        color: #262626;
+        transition: 0.3s;
+        &:focus {
+          border: 1px solid #1890ff;
+        }
+      }
+    }
+
+    .form-button {
+      cursor: pointer;
+      background: #1890ff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px;
+      color: #fff;
+      transition: 0.3s;
+      margin: 8px 0;
+      &:hover {
+        background: #188fffdd;
+      }
+    }
+
+    .form-validate {
+      color: #f5222d;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      margin: 0;
+    }
+
+    .required {
+      border: 1px solid #f5222d;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 16px;
+      line-height: 24px;
+      outline: none;
+      color: #262626;
+      transition: 0.3s;
     }
   }

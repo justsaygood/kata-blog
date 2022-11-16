@@ -39,7 +39,7 @@ export default function ArticleFull() {
         setError(true)
         setLoading(false)
       })
-  }, [slug, loading, userData, token])
+  }, [slug, userData, token])
 
   const successMessage = () => {
     notification.open({

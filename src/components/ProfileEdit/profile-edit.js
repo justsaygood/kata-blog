@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Form, Input, Button, Spin, Alert, notification } from 'antd'
-import { SmileTwoTone } from '@ant-design/icons'
+import { useForm } from 'react-hook-form'
+import { Spin, Alert, notification } from 'antd'
+import { LoadingOutlined, SmileTwoTone } from '@ant-design/icons'
 
 import { fetchUserUpdate, errorNull } from '../../store/userSlice'
 import classes from '../SignIn/sign-in.module.scss'
@@ -10,13 +11,22 @@ import classes from '../SignIn/sign-in.module.scss'
 export default function ProfileEdit() {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { error, status, userData } = useSelector((state) => state.user)
+  const { error, status, userData, errorMessage } = useSelector((state) => state.user)
 
   const [email, setEmail] = useState(userData.email)
   const [username, setUsername] = useState(userData.username)
   const [token, setToken] = useState('')
 
   const [isSuccess, setSuccess] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: 'onBlur',
+  })
 
   useEffect(() => {
     if (userData) {
@@ -34,7 +44,7 @@ export default function ProfileEdit() {
     notification.open({
       message: 'Your profile has been updated!',
       icon: <SmileTwoTone twoToneColor="#eb2f96" />,
-      duration: 4,
+      duration: 2,
       onClose: () => {
         history.push('/')
       },
@@ -51,6 +61,7 @@ export default function ProfileEdit() {
       try {
         localStorage.removeItem('token')
         localStorage.setItem('token', JSON.stringify(res.payload.user.token))
+        reset()
         setSuccess(true)
         successMessage()
       } catch (err) {
@@ -61,89 +72,78 @@ export default function ProfileEdit() {
   }
 
   const profileForm = (
-    <Form
-      name="dynamic_form_item"
-      layout="vertical"
-      size="large"
-      className={classes['ant-form']}
-      initialValues={{
-        username,
-        email,
-      }}
-      onFinish={(val) => {
-        editProfile(val)
-      }}
-    >
+    <form className={classes['sign-form']} onSubmit={handleSubmit(editProfile)}>
       <div className={classes['form-title']}>
-        <span>Edit Profile</span>
+        <span>Create new account</span>
       </div>
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="username"
-        label="Username"
-        rules={[
-          {
+      <label htmlFor="username" className={classes['form-label']}>
+        Username
+        <input
+          type="text"
+          placeholder="Username"
+          defaultValue={username}
+          className={errors?.username?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          {...register('username', {
             required: true,
-            message: 'Your username must be 3 to 20 characters long.',
-            min: 3,
-            max: 20,
-          },
-        ]}
-      >
-        <Input type="text" />
-      </Form.Item>
+            minLength: {
+              value: 3,
+              message: 'Your username must be 3 to 20 characters long.',
+            },
+            maxLength: {
+              value: 20,
+              message: 'Your username must be 3 to 20 characters long.',
+            },
+          })}
+        />
+        {errors?.username && <p className={classes['form-validate']}>{errors?.username?.message || 'Error!'}</p>}
+        {errorMessage.username ? <p>This username already exists</p> : null}
+      </label>
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        label="Email address"
-        name="email"
-        rules={[
-          {
-            type: 'email',
+      <label htmlFor="email" className={classes['form-label']}>
+        Email address
+        <input
+          className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          placeholder="Email"
+          defaultValue={email}
+          {...register('email', {
             required: true,
-            message: 'Please input your email!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+            pattern: /^[a-z0-9._%+-]+@[a-z0-9-]+.+.[a-z]{2,4}$/g,
+          })}
+        />
+        {errors?.email && <p className={classes['form-validate']}>{errors?.email?.message || 'Error!'}</p>}
+        {errorMessage.email ? <p>This email is already taken</p> : null}
+      </label>
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="password"
-        label="New password"
-        rules={[
-          {
-            message: 'Your password must be 6 to 40 characters long.',
-            min: 6,
-            max: 40,
-          },
-        ]}
-      >
-        <Input.Password type="password" placeholder="New password" />
-      </Form.Item>
+      <label htmlFor="password" className={classes['form-label']}>
+        New password
+        <input
+          type="new-password"
+          placeholder="Password"
+          className={errors?.password?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          {...register('password', {
+            minLength: {
+              value: 6,
+              message: 'Your password must be 6 to 40 characters long.',
+            },
+            maxLength: {
+              value: 40,
+              message: 'Your password must be 6 to 40 characters long.',
+            },
+          })}
+        />
+        {errors.password ? <p className={classes['form-validate']}>{errors.password.message}</p> : null}
+      </label>
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="image"
-        label="Avatar image (url)"
-        rules={[
-          {
-            type: 'url',
-            warningOnly: true,
-          },
-        ]}
-      >
-        <Input placeholder="Avatar image" />
-      </Form.Item>
+      <label htmlFor="image" className={classes['form-label']}>
+        Avatar image (url)
+        <input placeholder="Avatar image" className={classes.input} />
+      </label>
 
-      <Form.Item className={classes['ant-form-item-control-input-content']}>
-        <Button type="primary" htmlType="submit" className={classes['login-form-button']}>
-          Save
-        </Button>
-      </Form.Item>
-    </Form>
+      <button type="submit" className={classes['form-button']} disabled={status === 'loading'}>
+        {status === 'loading' ? <LoadingOutlined /> : 'Save'}
+      </button>
+    </form>
   )
 
   const onClose = () => {
@@ -158,7 +158,7 @@ export default function ProfileEdit() {
     />
   )
 
-  const errorMessage = (
+  const errorAlert = (
     <Alert
       description="Whoops, something went wrong :( Try again."
       type="error"
@@ -173,7 +173,7 @@ export default function ProfileEdit() {
     <>
       {profileForm}
       {status === 'loading' && spinner}
-      {error && errorMessage}
+      {error && !Object.keys(errorMessage).length && errorAlert}
       {isSuccess}
     </>
   )

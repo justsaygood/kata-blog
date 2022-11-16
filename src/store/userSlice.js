@@ -5,21 +5,27 @@ const baseURL = 'https://blog.kata.academy/api'
 export const fetchUserRegistration = createAsyncThunk(
   'user/fetchUserRegistration',
   async (newUser, { rejectWithValue }) => {
-    const url = new URL(`${baseURL}/users`) // register a new user
+    const url = new URL(`${baseURL}/users`)
     try {
-      const body = {
-        user: newUser,
-      }
       const headers = {
         'Content-Type': 'application/json;charset=utf-8',
       }
-      const response = await fetch(url, {
+      let response = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify(body),
+        body: JSON.stringify({ user: newUser }),
         headers,
       })
 
-      return response.json()
+      if (response.status === 422) {
+        return await response.json().then((result) => rejectWithValue(result))
+      }
+
+      if (!response.ok) {
+        throw new Error('Data fetching failed')
+      }
+
+      response = await response.json()
+      return response
     } catch (err) {
       return rejectWithValue(err.message)
     }
@@ -27,7 +33,7 @@ export const fetchUserRegistration = createAsyncThunk(
 )
 
 export const fetchUserLogIn = createAsyncThunk('user/fetchUserLogIn', async (newUser, { rejectWithValue }) => {
-  const url = new URL(`${baseURL}/users/login`) // existing user login
+  const url = new URL(`${baseURL}/users/login`)
   try {
     let response = await fetch(url, {
       method: 'POST',
@@ -74,17 +80,18 @@ export const fetchUserUpdate = createAsyncThunk(
   async ({ newUser, token }, { rejectWithValue }) => {
     const url = new URL(`${baseURL}/user`)
     try {
-      const body = {
-        user: newUser,
-      }
       const response = await fetch(url, {
         method: 'PUT',
-        body: JSON.stringify(body),
+        body: JSON.stringify({ user: newUser }),
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })
+
+      if (response.status === 422) {
+        return await response.json().then((result) => rejectWithValue(result))
+      }
 
       return response.json()
     } catch (err) {
@@ -125,6 +132,7 @@ const userSlice = createSlice({
       }
       if (action.payload.errors) {
         state.status = 'rejected'
+        state.errorMessage = action.payload.errors
 
         let errStatus = ''
 
@@ -143,6 +151,7 @@ const userSlice = createSlice({
     [fetchUserRegistration.rejected]: (state, action) => {
       state.status = 'rejected'
       state.error = action.payload
+      state.errorMessage = action.payload.errors
     },
     [fetchUserLogIn.pending]: (state) => {
       state.status = 'loading'
@@ -199,11 +208,13 @@ const userSlice = createSlice({
       }
       if (action.payload.errors) {
         state.status = 'rejected'
+        state.errorMessage = action.payload.errors
       }
     },
     [fetchUserUpdate.rejected]: (state, action) => {
       state.status = 'rejected'
       state.error = action.payload
+      state.errorMessage = action.payload.errors
     },
   },
 })

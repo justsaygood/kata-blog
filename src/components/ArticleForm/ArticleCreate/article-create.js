@@ -46,8 +46,8 @@ export default function ArticleCreate() {
         .postCreateArticle(newArticle, JSON.parse(localStorage.getItem('token')))
         .then((res) => {
           if (res.article) {
-            setLoading(false)
             setSuccess(true)
+            setLoading(false)
             successMessage()
             setError(false)
           }
@@ -72,7 +72,7 @@ export default function ArticleCreate() {
     setError(false)
   }
 
-  const article = <ArticleForm transferData={createArticle} title="Create new article" />
+  const article = <ArticleForm transferData={createArticle} title="Create new article" loading={loading} />
 
   const spinner = <Spin size="large" className={classes['form-spinner']} />
 

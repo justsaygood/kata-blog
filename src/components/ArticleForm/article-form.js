@@ -1,9 +1,10 @@
 import React from 'react'
 import { Form, Input, Button } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 import classes from './ArticleCreate/article-create.module.scss'
 
-export default function ArticleForm({ transferData, title, fields }) {
+export default function ArticleForm({ transferData, title, fields, loading }) {
   const onFinish = (str) => {
     transferData(str)
   }
@@ -67,7 +68,6 @@ export default function ArticleForm({ transferData, title, fields }) {
             <>
               {fieldsList.map((field, index) => (
                 <Form.Item label={index === 0 ? 'Tags' : ''} className={classes['ant-form-item']} key={field.key}>
-                  {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                   <Form.Item {...field} noStyle rules={[{ required: true, message: 'set at least one tag' }]}>
                     <Input placeholder="Tag" style={{ width: '40%' }} />
                   </Form.Item>
@@ -100,8 +100,8 @@ export default function ArticleForm({ transferData, title, fields }) {
         </Form.List>
 
         <Form.Item className={classes['ant-form-item']}>
-          <Button type="primary" htmlType="submit" className={classes['form-item-send-button']}>
-            Send
+          <Button type="primary" htmlType="submit" className={classes['form-item-send-button']} disabled={loading}>
+            {loading === true ? <LoadingOutlined /> : 'Send'}
           </Button>
         </Form.Item>
       </div>

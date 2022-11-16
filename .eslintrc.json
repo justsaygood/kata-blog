@@ -34,6 +34,7 @@
     "prettier/prettier": "error",
     "quotes": ["error", "single"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-props-no-spreading": "off",
     "react/prop-types": 0,
     "react/state-in-constructor": 0,
     "react/react-in-jsx-scope": "off",

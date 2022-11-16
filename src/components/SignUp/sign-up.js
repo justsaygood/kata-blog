@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Input, Button, Checkbox, Divider, Alert, Spin } from 'antd'
+import { useForm } from 'react-hook-form'
+import { Checkbox, Divider, Alert, Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 import { errorNull, fetchUserRegistration } from '../../store/userSlice'
 import classes from '../SignIn/sign-in.module.scss'
@@ -9,8 +11,16 @@ import classes from '../SignIn/sign-in.module.scss'
 export default function SignUp() {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { error, status, userData } = useSelector((state) => state.user)
-  // console.log(status, error)
+  const { error, status, userData, errorMessage } = useSelector((state) => state.user)
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onBlur',
+  })
 
   const userRegistration = (str) => {
     const newUser = {
@@ -22,117 +32,92 @@ export default function SignUp() {
   }
 
   const form = (
-    <Form
-      layout="vertical"
-      size="large"
-      className={classes['ant-form']}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={(str) => {
-        userRegistration(str)
-      }}
-    >
+    <form className={classes['sign-form']} onSubmit={handleSubmit(userRegistration)}>
       <div className={classes['form-title']}>
         <span>Create new account</span>
       </div>
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="username"
-        label="Username"
-        rules={[
-          {
+      <label htmlFor="username" className={classes['form-label']}>
+        Username
+        <input
+          type="text"
+          placeholder="Username"
+          className={errors?.username?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          {...register('username', {
             required: true,
-            message: 'Your username must be 3 to 20 characters long.',
-            min: 3,
-            max: 20,
-          },
-        ]}
-      >
-        <Input type="text" placeholder="Username" />
-      </Form.Item>
-
-      <Form.Item
-        className={classes['ant-form-item']}
-        label="Email address"
-        name="email"
-        rules={[
-          {
-            type: 'email',
-            required: true,
-            message: 'Please input your email!',
-          },
-        ]}
-      >
-        <Input placeholder="Email address" />
-      </Form.Item>
-
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="password"
-        label="Password"
-        rules={[
-          {
-            required: true,
-            message: 'Your password must be 6 to 40 characters long.',
-            min: 6,
-            max: 40,
-          },
-        ]}
-      >
-        <Input.Password type="password" placeholder="Password" />
-      </Form.Item>
-
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="confirm"
-        label="Repeat Password"
-        dependencies={['password']}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: 'Passwords must match',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve()
-              }
-
-              return Promise.reject(new Error('The passwords aren`t the same'))
+            minLength: {
+              value: 3,
+              message: 'Your username must be 3 to 20 characters long.',
             },
-          }),
-        ]}
-      >
-        <Input.Password placeholder="Password" />
-      </Form.Item>
+            maxLength: {
+              value: 20,
+              message: 'Your username must be 3 to 20 characters long.',
+            },
+          })}
+        />
+        {errors?.username && <p className={classes['form-validate']}>{errors?.username?.message || 'Error!'}</p>}
+        {errorMessage.username ? <p>This username already exists</p> : null}
+      </label>
+
+      <label htmlFor="email" className={classes['form-label']}>
+        Email address
+        <input
+          className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          placeholder="Email"
+          {...register('email', {
+            required: true,
+            pattern: /^[a-z0-9._%+-]+@[a-z0-9-]+.+.[a-z]{2,4}$/g,
+          })}
+        />
+        {errors?.email && <p className={classes['form-validate']}>{errors?.email?.message || 'Error!'}</p>}
+        {errorMessage.email ? <p>This email is already taken</p> : null}
+      </label>
+
+      <label htmlFor="password" className={classes['form-label']}>
+        Password
+        <input
+          type="password"
+          placeholder="Password"
+          className={errors?.password?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          {...register('password', {
+            required: true,
+            minLength: {
+              value: 6,
+              message: 'Your password must be 6 to 40 characters long.',
+            },
+            maxLength: {
+              value: 40,
+              message: 'Your password must be 6 to 40 characters long.',
+            },
+          })}
+        />
+        {errors.password ? <p className={classes['form-validate']}>{errors.password.message}</p> : null}
+      </label>
+
+      <label htmlFor="repeat" className={classes['form-label']}>
+        Repeat Password
+        <input
+          className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          placeholder="Repeat password"
+          {...register('repeatPassword', {
+            required: 'You must repeat your password',
+            validate: (value) => getValues('password') === value || 'Passwords must match',
+          })}
+        />
+        {errors.repeatPassword ? <p className={classes['form-validate']}>Passwords must match</p> : null}
+      </label>
 
       <Divider className={classes['ant-divider']} />
 
-      <Form.Item
-        className={classes['ant-form-item']}
-        name="agreement"
-        valuePropName="checked"
-        rules={[
-          {
-            validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error('The agreement isn`t accepted')),
-          },
-        ]}
-      >
-        <Checkbox>I agree to the processing of my personal information</Checkbox>
-      </Form.Item>
-      <Form.Item className={classes['ant-form-item-control-input-content']}>
-        <Button type="primary" htmlType="submit" className={classes['login-form-button']}>
-          Create
-        </Button>
-        <span>
-          Already have an account? <Link to="/sign-in">Sign In</Link>.
-        </span>
-      </Form.Item>
-    </Form>
+      <Checkbox checked>I agree to the processing of my personal information</Checkbox>
+
+      <button type="submit" className={classes['form-button']} disabled={!isValid || status === 'loading'}>
+        {status === 'loading' ? <LoadingOutlined /> : 'Create'}
+      </button>
+      <span>
+        Already have an account? <Link to="/sign-in">Sign In</Link>.
+      </span>
+    </form>
   )
 
   const onClose = () => {
@@ -147,7 +132,7 @@ export default function SignUp() {
     />
   )
 
-  const errorMessage = (
+  const errorAlert = (
     <Alert
       description="Whoops, something went wrong :("
       type="error"
@@ -155,7 +140,7 @@ export default function SignUp() {
       showIcon
       closable
       onClose={onClose}
-      style={{ position: 'relative', bottom: '500px', left: '200px', width: '50%' }}
+      style={{ position: 'relative', bottom: '470px', left: '200px', width: '50%' }}
     />
   )
 
@@ -165,7 +150,7 @@ export default function SignUp() {
       description="Welcome to Realworld Blog!"
       closable
       onClose={() => history.push('/')}
-      style={{ position: 'relative', top: '-207px', left: '200px', width: '50%' }}
+      style={{ position: 'relative', bottom: '680px', left: '200px', width: '50%' }}
     />
   )
 
@@ -173,7 +158,7 @@ export default function SignUp() {
     <div>
       {form}
       {status === 'loading' && spinner}
-      {error && errorMessage}
+      {error && !Object.keys(errorMessage).length && errorAlert}
       {userData && successMessage}
     </div>
   )

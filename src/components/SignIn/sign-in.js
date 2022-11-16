@@ -69,7 +69,6 @@ export default function SignIn() {
         <input
           className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
           placeholder="Email address"
-          /* eslint-disable-next-line react/jsx-props-no-spreading */
           {...register('email', {
             required: true,
             pattern: {
@@ -83,10 +82,9 @@ export default function SignIn() {
       <label htmlFor="email" className={classes['form-label']}>
         Password
         <input
-          className={errors?.email?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
+          className={errors?.password?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
           type="password"
           placeholder="Password"
-          /* eslint-disable-next-line react/jsx-props-no-spreading */
           {...register('password', {
             required: 'Please input your Password!',
           })}

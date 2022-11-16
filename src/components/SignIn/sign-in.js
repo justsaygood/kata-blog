@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Alert, Spin, notification } from 'antd'
-import { UserOutlined, LoadingOutlined } from '@ant-design/icons'
+import { LoadingOutlined, HeartOutlined } from '@ant-design/icons'
 
 import { fetchUserLogIn, errorNull } from '../../store/userSlice'
 
@@ -24,11 +24,11 @@ export default function SignIn() {
 
   const successMessage = () => {
     notification.open({
-      message: 'Welcome to Realworld Blog!',
+      message: 'Welcome back to Realworld Blog!',
       icon: (
-        <UserOutlined
+        <HeartOutlined
           style={{
-            color: '#1890FF',
+            color: 'pink',
           }}
         />
       ),

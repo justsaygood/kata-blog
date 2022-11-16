@@ -23,8 +23,11 @@ export default function ArticleItem({ item, confirmation, showSettings }) {
   const [likeDisabled, setLikeDisabled] = useState(true)
 
   useEffect(() => {
-    if (userData) {
+    if (userData && token !== '') {
       setLikeDisabled(false)
+    }
+    if (token === '') {
+      setLikeDisabled(true)
     }
   }, [userData, favorited])
 
@@ -68,7 +71,7 @@ export default function ArticleItem({ item, confirmation, showSettings }) {
               <Link to={`/articles/${slug}`}>{title}</Link>
             </h2>
             <button className={classes['article-rating']} type="button" onClick={likeHandler} disabled={likeDisabled}>
-              {like ? (
+              {like && token !== '' ? (
                 <HeartFilled
                   style={{ fontSize: '18px', width: '20px', height: '20px', marginRight: '4px', color: '#ed553b' }}
                 />

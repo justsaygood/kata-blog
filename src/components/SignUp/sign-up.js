@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
-import { Checkbox, Divider, Alert, Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Checkbox, Divider, Alert, Spin, notification } from 'antd'
+import { LoadingOutlined, UserOutlined } from '@ant-design/icons'
 
 import { errorNull, fetchUserRegistration } from '../../store/userSlice'
 import classes from '../SignIn/sign-in.module.scss'
@@ -30,6 +30,36 @@ export default function SignUp() {
     }
     dispatch(fetchUserRegistration(newUser))
   }
+
+  const successMessage = () => {
+    notification.open({
+      message: 'Welcome to the Realworld Blog!',
+      icon: (
+        <UserOutlined
+          style={{
+            color: '#1890FF',
+          }}
+        />
+      ),
+      duration: 3,
+    })
+  }
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    try {
+      if (userData) {
+        localStorage.setItem('token', JSON.stringify(userData.token))
+        successMessage()
+        const timeout = setTimeout(() => {
+          history.push('/')
+        }, 3000)
+        return () => clearTimeout(timeout)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }, [userData])
 
   const form = (
     <form className={classes['sign-form']} onSubmit={handleSubmit(userRegistration)}>
@@ -144,22 +174,11 @@ export default function SignUp() {
     />
   )
 
-  const successMessage = (
-    <Alert
-      className={classes['form-alert']}
-      description="Welcome to Realworld Blog!"
-      closable
-      onClose={() => history.push('/')}
-      style={{ position: 'relative', bottom: '680px', left: '200px', width: '50%' }}
-    />
-  )
-
   return (
     <div>
       {form}
       {status === 'loading' && spinner}
       {error && !Object.keys(errorMessage).length && errorAlert}
-      {userData && successMessage}
     </div>
   )
 }

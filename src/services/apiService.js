@@ -62,8 +62,6 @@ class ApiService {
   async postCreateArticle(newArticle, token) {
     const url = new URL(`${this.baseURL}/articles`)
 
-    const body = { article: newArticle }
-
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -71,7 +69,7 @@ class ApiService {
 
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(body),
+      body: JSON.stringify({ article: newArticle }),
       headers,
     }).catch((err) => err.message)
 

@@ -51,7 +51,11 @@ export default function Header({ connection }) {
   )
 
   const errorResults = (
-    <Result status="error" title="Internet disconnected" subTitle="Check your connection and reload the page!" />
+    <Result
+      status="error"
+      title="Network disconnected"
+      subTitle="Check your Internet connection and reload the page!"
+    />
   )
 
   return (

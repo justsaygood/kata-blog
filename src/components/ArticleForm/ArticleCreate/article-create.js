@@ -33,11 +33,12 @@ export default function ArticleCreate() {
   }
 
   const createArticle = (str) => {
+    const filteredTags = str.tagList === undefined ? [] : str.tagList.filter((item) => item)
     const newArticle = {
       title: str.title.trim(),
       description: str.description.trim(),
       body: str.body,
-      tagList: str.tagList.map((item) => item.trim()).filter((item) => item),
+      tagList: filteredTags,
     }
     setLoading(true)
 

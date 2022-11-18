@@ -58,7 +58,7 @@ function ArticleEdit() {
       title: str.title.trim(),
       description: str.description.trim(),
       body: str.body,
-      tagList: str.tagList.map((item) => item.trim()).filter((item) => item),
+      tagList: str.tagList.filter((item) => item),
     }
 
     setLoading(true)

@@ -56,7 +56,7 @@ export default function ArticleForm({ transferData, title, fields, loading }) {
         rules={[
           {
             required: true,
-            message: 'Text is required!',
+            message: 'You can`t create an article without text!',
           },
         ]}
       >
@@ -69,11 +69,7 @@ export default function ArticleForm({ transferData, title, fields, loading }) {
             <>
               {fieldsList.map((field, index) => (
                 <Form.Item label={index === 0 ? 'Tags' : ''} className={classes['ant-form-item']} key={field.key}>
-                  <Form.Item
-                    {...field}
-                    noStyle
-                    rules={[{ required: true, message: 'Set at least one tag or an empty space for no value!' }]}
-                  >
+                  <Form.Item {...field} noStyle initialValues={['']}>
                     <Input placeholder="Tag" style={{ width: '40%' }} />
                   </Form.Item>
 
@@ -97,7 +93,7 @@ export default function ArticleForm({ transferData, title, fields, loading }) {
                     add()
                   }}
                 >
-                  * Add tag
+                  Add tag
                 </Button>
               </Form.Item>
             </>

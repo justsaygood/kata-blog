@@ -122,6 +122,7 @@ export default function ProfileEdit() {
           placeholder="Password"
           className={errors?.password?.message || Object.keys(errorMessage).length ? classes.required : classes.input}
           {...register('password', {
+            required: 'Enter your new password or use the old one.',
             minLength: {
               value: 6,
               message: 'Your password must be 6 to 40 characters long.',
@@ -137,7 +138,15 @@ export default function ProfileEdit() {
 
       <label htmlFor="image" className={classes['form-label']}>
         Avatar image (url)
-        <input placeholder="Avatar image" className={classes.input} />
+        <input
+          placeholder="Avatar image"
+          className={classes.input}
+          defaultValue={userData.image ? userData.image : null}
+          {...register('image', {
+            /* eslint-disable-next-line */
+            pattern: /[-a-zA-Z0-9@:%_+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&\/=]*)?/gi,
+          })}
+        />
       </label>
 
       <button type="submit" className={classes['form-button']} disabled={status === 'loading'}>

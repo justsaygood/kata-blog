@@ -11,7 +11,8 @@ export default function Header({ connection }) {
   const dispatch = useDispatch()
   const { userData } = useSelector((state) => state.user)
 
-  const avatar = userData === null || !userData.image ? selfie : userData.image
+  const avatar = userData === null || undefined ? selfie : userData.image
+  console.log(avatar)
 
   const logOut = () => {
     try {

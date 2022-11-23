@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { nanoid } from '@reduxjs/toolkit'
@@ -103,4 +104,38 @@ export default function ArticleItem({ item, confirmation, showSettings }) {
       <p className={classes['article-description']}>{description}</p>
     </div>
   )
+}
+
+ArticleItem.defaultProps = {
+  showSettings: false,
+  confirmation: PropTypes.func,
+  item: {
+    title: '',
+    favorited: false,
+    favoritesCount: null,
+    description: '',
+    createdAt: '',
+    slug: '',
+    author: PropTypes.shape({
+      username: '',
+      image: null,
+    }),
+  },
+}
+
+ArticleItem.propTypes = {
+  showSettings: PropTypes.bool,
+  confirmation: PropTypes.func,
+  item: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    createdAt: PropTypes.string,
+    slug: PropTypes.string,
+    favorited: PropTypes.bool,
+    favoritesCount: PropTypes.number,
+    author: PropTypes.shape({
+      username: PropTypes.string,
+      image: PropTypes.string,
+    }),
+  }),
 }

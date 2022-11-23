@@ -12,7 +12,6 @@ export default function Header({ connection }) {
   const { userData } = useSelector((state) => state.user)
 
   const avatar = userData === null || undefined ? selfie : userData.image
-  console.log(avatar)
 
   const logOut = () => {
     try {

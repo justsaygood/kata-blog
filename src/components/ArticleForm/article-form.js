@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Form, Input, Button } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 
@@ -108,4 +109,19 @@ export default function ArticleForm({ transferData, title, fields, loading }) {
       </div>
     </Form>
   )
+}
+
+ArticleForm.defaultProps = {
+  title: '',
+  description: '',
+  fields: [],
+  tagList: [],
+}
+
+ArticleForm.propTypes = {
+  transferData: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  fields: PropTypes.shape([]),
+  tagList: PropTypes.shape([]),
 }
